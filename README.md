@@ -42,8 +42,8 @@ This repo contains a Nagios plugin to send Nagios notifications to incident.io.
                     --last_host_check="$LASTHOSTCHECK$" \
                     --service_notification_number="$SERVICENOTIFICATIONNUMBER$" \
                     --host_notification_number="$HOSTNOTIFICATIONNUMBER$"
-}
-    ```
+   }
+   ```
 
 4. By default, a title, alert status and description will be generated based on the variables provided. But you can override those with the flags `--title`, etc.
 5. Add a new contact for incident.io
