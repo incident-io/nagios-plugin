@@ -9,6 +9,8 @@ import (
 	"os"
 )
 
+var version = "development"
+
 type AlertSourcePayload struct {
 	Title            string                 `json:"title"`
 	Status           string                 `json:"status"`
@@ -31,7 +33,7 @@ func sendIncidentNotification(apiURL, token string, incidentData AlertSourcePayl
 
 	req.Header.Set("Authorization", "Bearer "+token)
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("X-Incident-Nagios-Version", "1.0")
+	req.Header.Set("User-Agent", "Nagios Incident.io Plugin/"+version)
 
 	client := &http.Client{}
 	resp, err := client.Do(req)

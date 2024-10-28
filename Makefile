@@ -3,8 +3,11 @@
 # Name of the binary to generate
 BINARY = notify_incident_io
 
-# Go build flags
-BUILD_FLAGS = -ldflags "-s -w"
+# Version can be set manually or passed in from the GitHub Actions workflow
+VERSION ?= development
+
+# Go build flags with version information
+BUILD_FLAGS = -ldflags "-s -w -X 'main.version=$(VERSION)'"
 
 .PHONY: all build clean
 
@@ -13,7 +16,7 @@ all: build
 
 # Build the binary
 build:
-	go build $(BUILD_FLAGS) -o $(BINARY) nagios-incident-io.go
+	go build $(BUILD_FLAGS) -o $(BINARY) main.go
 
 # Clean up build artifacts
 clean:
