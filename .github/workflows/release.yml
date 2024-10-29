@@ -6,7 +6,7 @@ on:
       - 'v*'
 
 permissions:
-  contents: write  # Grants write access to the repository contents, including releases and assets
+  contents: write  # Grants write access to repository contents, including releases and assets
 
 jobs:
   release:
@@ -22,15 +22,17 @@ jobs:
           go-version: '1.22'
 
       - name: Get version from tag
-        id: get_version
-        run: echo "::set-output name=version::${GITHUB_REF##*/}"
+        run: echo "version=${GITHUB_REF##*/}" >> $GITHUB_ENV
+  
+      - name: Build binaries
+        run: make release VERSION=${{ env.version }}
+  
 
-      - name: Build binary
-        run: make build VERSION=${{ steps.get_version.outputs.version }}
-
-      - name: Create GitHub Release   
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ steps.get_version.outputs.version }}
-          name: ${{ steps.get_version.outputs.version }}
-          files: ./notify_incident_io
+          tag_name: ${{ env.version }}
+          name: ${{ env.version }}
+          files: ./notify_incident_io-*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -27,3 +27,4 @@ go.work.sum
 .idea/
 
 notify_incident_io
+notify_incident_io-*
