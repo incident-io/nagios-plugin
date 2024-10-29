@@ -5,7 +5,7 @@ This repo contains a Nagios plugin to send Nagios notifications to incident.io.
 ## Installation
 
 1. **Download the Binary**:
-   Download the `notify_incident_io` binary from the releases page.
+   Download the relevant `notify_incident_io-*` binary for your OS from the releases page.
 
 2. **Move the Binary to the Nagios Plugins Directory**:
    Place the `notify_incident_io` binary in your Nagios plugins directory, typically located at `/usr/local/nagios/libexec/`. You may need to use `sudo` to copy the binary to this directory.
