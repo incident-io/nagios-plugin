@@ -14,9 +14,9 @@ var version = "development"
 type AlertSourcePayload struct {
 	Title            string                 `json:"title"`
 	Status           string                 `json:"status"`
-	DeduplicationKey *string                `json:"deduplication_key,omitempty"`
-	Description      *string                `json:"description,omitempty"`
-	SourceURL        *string                `json:"source_url,omitempty"`
+	DeduplicationKey string                 `json:"deduplication_key,omitempty"`
+	Description      string                 `json:"description,omitempty"`
+	SourceURL        string                 `json:"source_url,omitempty"`
 	Metadata         map[string]interface{} `json:"metadata"`
 }
 
@@ -25,6 +25,10 @@ func sendIncidentNotification(apiURL, token string, incidentData AlertSourcePayl
 	if err != nil {
 		return fmt.Errorf("failed to marshal JSON: %v", err)
 	}
+
+	// Log the payload, for debugging
+	fmt.Println("Sending incident.io notification with payload:")
+	fmt.Println(string(jsonData))
 
 	req, err := http.NewRequest("POST", apiURL, bytes.NewBuffer(jsonData))
 	if err != nil {
@@ -81,6 +85,9 @@ func main() {
 	lastHostCheck := flag.String("last_host_check", "", "The last state of the host")
 	serviceNotificationNumber := flag.String("service_notification_number", "", "The notification number for the service")
 	hostNotificationNumber := flag.String("host_notification_number", "", "The notification number for the host")
+	contactName := flag.String("contact_name", "", "The name of the contact")
+	contactAlias := flag.String("contact_alias", "", "The alias of the contact")
+	otherMetadata := flag.String("metadata", "", "Additional metadata in JSON format")
 
 	// Parse the command-line arguments
 	flag.Parse()
@@ -132,76 +139,104 @@ func main() {
 
 	// Build metadata from individual arguments
 	metadata := make(map[string]interface{})
-	if *hostName != "" {
+	if hostName != nil && *hostName != "" {
 		metadata["host_name"] = *hostName
 	}
-	if *hostAddress != "" {
+	if hostAddress != nil && *hostAddress != "" {
 		metadata["host_address"] = *hostAddress
 	}
-	if *hostAlias != "" {
+	if hostAlias != nil && *hostAlias != "" {
 		metadata["host_alias"] = *hostAlias
 	}
-	if *serviceDesc != "" {
+	if serviceDesc != nil && *serviceDesc != "" {
 		metadata["service_desc"] = *serviceDesc
 	}
-	if *notificationType != "" {
+	if notificationType != nil && *notificationType != "" {
 		metadata["notification_type"] = *notificationType
 	}
-	if *hostState != "" {
+	if hostState != nil && *hostState != "" {
 		metadata["host_state"] = *hostState
 	}
-	if *serviceState != "" {
+	if serviceState != nil && *serviceState != "" {
 		metadata["service_state"] = *serviceState
 	}
-	if *serviceAttempt != "" {
+	if serviceAttempt != nil && *serviceAttempt != "" {
 		metadata["service_attempt"] = *serviceAttempt
 	}
-	if *maxServiceAttempts != "" {
+	if maxServiceAttempts != nil && *maxServiceAttempts != "" {
 		metadata["max_service_attempts"] = *maxServiceAttempts
 	}
-	if *lastServiceState != "" {
+	if lastServiceState != nil && *lastServiceState != "" {
 		metadata["last_service_state"] = *lastServiceState
 	}
-	if *serviceOutput != "" {
+	if serviceOutput != nil && *serviceOutput != "" {
 		metadata["service_output"] = *serviceOutput
 	}
-	if *hostAttempt != "" {
+	if hostAttempt != nil && *hostAttempt != "" {
 		metadata["host_attempt"] = *hostAttempt
 	}
-	if *maxHostAttempts != "" {
+	if maxHostAttempts != nil && *maxHostAttempts != "" {
 		metadata["max_host_attempts"] = *maxHostAttempts
 	}
-	if *lastHostState != "" {
+	if lastHostState != nil && *lastHostState != "" {
 		metadata["last_host_state"] = *lastHostState
 	}
-	if *hostOutput != "" {
+	if hostOutput != nil && *hostOutput != "" {
 		metadata["host_output"] = *hostOutput
 	}
-	if *serviceDuration != "" {
+	if serviceDuration != nil && *serviceDuration != "" {
 		metadata["service_duration"] = *serviceDuration
 	}
-	if *hostDuration != "" {
+	if hostDuration != nil && *hostDuration != "" {
 		metadata["host_duration"] = *hostDuration
 	}
-	if *lastServiceCheck != "" {
+	if lastServiceCheck != nil && *lastServiceCheck != "" {
 		metadata["last_service_check"] = *lastServiceCheck
 	}
-	if *lastHostCheck != "" {
+	if lastHostCheck != nil && *lastHostCheck != "" {
 		metadata["last_host_check"] = *lastHostCheck
 	}
-	if *serviceNotificationNumber != "" {
+	if serviceNotificationNumber != nil && *serviceNotificationNumber != "" {
 		metadata["service_notification_number"] = *serviceNotificationNumber
 	}
-	if *hostNotificationNumber != "" {
+	if hostNotificationNumber != nil && *hostNotificationNumber != "" {
 		metadata["host_notification_number"] = *hostNotificationNumber
+	}
+	if contactName != nil && *contactName != "" {
+		metadata["contact_name"] = *contactName
+	}
+	if contactAlias != nil && *contactAlias != "" {
+		metadata["contact_alias"] = *contactAlias
+	}
+
+	// Parse additional metadata from JSON string
+	if otherMetadata != nil && *otherMetadata != "" {
+		var otherMetadataMap map[string]interface{}
+		if err := json.Unmarshal([]byte(*otherMetadata), &otherMetadataMap); err != nil {
+			fmt.Printf("Error: %v\n", err)
+			os.Exit(2)
+		}
+		for key, value := range otherMetadataMap {
+			metadata[key] = value
+		}
+	}
+
+	description := ""
+	if overrideDescription != nil && *overrideDescription != "" {
+		description = *overrideDescription
+	}
+
+	sourceURL := ""
+	if overrideSourceURL != nil && *overrideSourceURL != "" {
+		sourceURL = *overrideSourceURL
 	}
 
 	// Construct the incident data
 	incidentData := AlertSourcePayload{
-		DeduplicationKey: &deduplicationKey,
-		Description:      overrideDescription,
+		DeduplicationKey: deduplicationKey,
+		Description:      description,
 		Metadata:         metadata,
-		SourceURL:        overrideSourceURL,
+		SourceURL:        sourceURL,
 		Status:           status,
 		Title:            title,
 	}

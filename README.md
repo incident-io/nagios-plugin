@@ -21,6 +21,7 @@ This repo contains a Nagios plugin to send Nagios notifications to incident.io.
     command_line    /usr/local/nagios/libexec/notify_incident_io \
                     --api_url="<your_api_url>" \
                     --token="<your_api_token>" \
+                    --metadata="{}" \
                     --host_name="$HOSTNAME$" \
                     --host_address="$HOSTADDRESS$" \
                     --host_alias="$HOSTALIAS$" \
@@ -39,6 +40,8 @@ This repo contains a Nagios plugin to send Nagios notifications to incident.io.
                     --service_duration="$SERVICEDURATION$" \
                     --host_duration="$HOSTDURATION$" \
                     --last_service_check="$LASTSERVICECHECK$" \
+                    --contact_name="$CONTACTNAME$" \
+                    --content_alias="$CONTENTALIAS$" \
                     --last_host_check="$LASTHOSTCHECK$" \
                     --service_notification_number="$SERVICENOTIFICATIONNUMBER$" \
                     --host_notification_number="$HOSTNOTIFICATIONNUMBER$"
