@@ -42,6 +42,7 @@ This repo contains a Nagios plugin to send Nagios notifications to incident.io.
                     --last_service_check="$LASTSERVICECHECK$" \
                     --contact_name="$CONTACTNAME$" \
                     --content_alias="$CONTENTALIAS$" \
+                    --contact_group_alias="$CONTACTGROUPALIAS$" \
                     --last_host_check="$LASTHOSTCHECK$" \
                     --service_notification_number="$SERVICENOTIFICATIONNUMBER$" \
                     --host_notification_number="$HOSTNOTIFICATIONNUMBER$"

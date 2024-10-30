@@ -86,6 +86,7 @@ func main() {
 	hostNotificationNumber := flag.String("host_notification_number", "", "The notification number for the host")
 	contactName := flag.String("contact_name", "", "The name of the contact")
 	contactAlias := flag.String("contact_alias", "", "The alias of the contact")
+	contactGroupAlias := flag.String("contact_group_alias", "", "The alias of the contact group")
 	otherMetadata := flag.String("metadata", "", "Additional metadata in JSON format")
 
 	// Parse the command-line arguments
@@ -206,6 +207,9 @@ func main() {
 	}
 	if contactAlias != nil && *contactAlias != "" {
 		metadata["contact_alias"] = *contactAlias
+	}
+	if contactGroupAlias != nil && *contactGroupAlias != "" {
+		metadata["contact_group_alias"] = *contactGroupAlias
 	}
 
 	// Parse additional metadata from JSON string
