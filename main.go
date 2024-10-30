@@ -26,7 +26,6 @@ func sendIncidentNotification(apiURL, token string, incidentData AlertSourcePayl
 		return fmt.Errorf("failed to marshal JSON: %v", err)
 	}
 
-	// Log the payload, for debugging
 	fmt.Println("Sending incident.io notification with payload:")
 	fmt.Println(string(jsonData))
 
