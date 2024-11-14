@@ -24,7 +24,7 @@ build:
 # Cross-compile binaries for all target platforms
 release: clean
 	@for platform in $(PLATFORMS); do \
-		GOOS=$${platform%/*} GOARCH=$${platform#*/} go build $(BUILD_FLAGS) -o $(BINARY)-$${platform%/*}-$${platform#*/} main.go || exit 1; \
+		CGO_ENABLED=0 GOOS=$${platform%/*} GOARCH=$${platform#*/} go build $(BUILD_FLAGS) -o $(BINARY)-$${platform%/*}-$${platform#*/} main.go || exit 1; \
 	done
 
 # Clean up build artifacts
