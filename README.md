@@ -1,6 +1,12 @@
 # Nagios incident.io Alert Source Plugin
 
-This repo contains a Nagios plugin to send Nagios notifications to incident.io. 
+This repo contains a Nagios plugin to send Nagios notifications to incident.io.
+
+> [!NOTE]
+> You'll need to [create a Nagios Alert Source][create-source] in your incident.io account to
+> generate the `--api_url` and `--token` values required by the plugin.
+
+[create-source]: https://app.incident.io/~/alerts/sources/create
 
 ## Installation
 
