@@ -2,25 +2,24 @@
 
 This repo contains a Nagios plugin to send Nagios notifications to incident.io.
 
-> [!NOTE]
-> You'll need to [create a Nagios Alert Source][create-source] in your incident.io account to
-> generate the `--api_url` and `--token` values required by the plugin.
-
 [create-source]: https://app.incident.io/~/alerts/sources/create
 
 ## Installation
 
+1. **[Create a Nagios Core Alert Source][create-source] in your incident.io account**:
+   Search for `Nagios Core` in the alert source list, and continue to initialise the `api_url` and `token` values required by the plugin.
+
 1. **Download the Binary**:
    Download the relevant `notify_incident_io-*` binary for your OS from the releases page.
 
-2. **Move the Binary to the Nagios Plugins Directory**:
+1. **Move the Binary to the Nagios Plugins Directory**:
    Place the `notify_incident_io` binary in your Nagios plugins directory, typically located at `/usr/local/nagios/libexec/`. You may need to use `sudo` to copy the binary to this directory.
 
    ```bash
    sudo cp notify_incident_io /usr/local/nagios/libexec/
    sudo chmod +x /usr/local/nagios/libexec/notify_incident_io
 
-3. Add a new command for notifying incident-io using the binary
+1. Add a new command for notifying incident-io using the binary
     ```
     define command {
     command_name    notify_incident_io
@@ -55,8 +54,8 @@ This repo contains a Nagios plugin to send Nagios notifications to incident.io.
    }
    ```
 
-4. By default, a title, alert status and description will be generated based on the variables provided. But you can override those with the flags `--title`, etc.
-5. Add a new contact for incident.io
+1. By default, a title, alert status and description will be generated based on the variables provided. But you can override those with the flags `--title`, etc.
+1. Add a new contact for incident.io
     ```
     define contact {
         contact_name                    incident_io
@@ -69,7 +68,7 @@ This repo contains a Nagios plugin to send Nagios notifications to incident.io.
         host_notification_commands      notify_incident_io
     }
     ```
-6. Add the contact to a contact group
+1. Add the contact to a contact group
     ```
     define contactgroup {
         contactgroup_name       admins
@@ -77,7 +76,7 @@ This repo contains a Nagios plugin to send Nagios notifications to incident.io.
         members                 root,incident_io
     }
     ```
-7. Add the contact group to a service or host
+1. Add the contact group to a service or host
     ```
     define service {
         use                     generic-service
@@ -87,7 +86,7 @@ This repo contains a Nagios plugin to send Nagios notifications to incident.io.
         contact_groups          admins
     }
     ```
-8. Restart Nagios to apply the changes
+1. Restart Nagios to apply the changes
     ```
     sudo systemctl restart nagios
     ```
