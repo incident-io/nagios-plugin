@@ -1,3 +1,7 @@
+## 1.0.3
+
+- Fixes an issue where events with only a service or only a host in a resolved state would result in an incorrect firing state.
+
 ## 1.0.2
 
 - Executable is no longer linked to glibc, so will run in any environment.
