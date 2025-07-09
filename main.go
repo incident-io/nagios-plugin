@@ -140,7 +140,16 @@ func main() {
 		// Neither host nor service state is provided, default to firing
 		status = "firing"
 	}
-	fmt.Print("States are: ", *hostState, *serviceState, "\n")
+	// Safely print states, handling nil pointers
+	hostStateValue := "<nil>"
+	if hostState != nil {
+		hostStateValue = *hostState
+	}
+	serviceStateValue := "<nil>"
+	if serviceState != nil {
+		serviceStateValue = *serviceState
+	}
+	fmt.Print("States are: ", hostStateValue, " ", serviceStateValue, "\n")
 
 	deduplicationKey := ""
 	if overrideDeduplicationKey != nil && *overrideDeduplicationKey != "" {
