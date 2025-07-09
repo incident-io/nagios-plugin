@@ -112,11 +112,32 @@ func main() {
 		title = "Nagios Notification"
 	}
 
-	// Only record positive state if both host and service are OK
+	// Determine status based on available host and service states
 	var status string
-	if hostState != nil && serviceState != nil && *hostState == "UP" && *serviceState == "OK" {
-		status = "resolved"
+	
+	// If both host and service are provided, both must be OK/UP for resolved status
+	if hostState != nil && *hostState != "" && serviceState != nil && *serviceState != "" {
+		if *hostState == "UP" && *serviceState == "OK" {
+			status = "resolved"
+		} else {
+			status = "firing"
+		}
+	} else if hostState != nil && *hostState != "" {
+		// Only host state is provided
+		if *hostState == "UP" {
+			status = "resolved"
+		} else {
+			status = "firing"
+		}
+	} else if serviceState != nil && *serviceState != "" {
+		// Only service state is provided
+		if *serviceState == "OK" {
+			status = "resolved"
+		} else {
+			status = "firing"
+		}
 	} else {
+		// Neither host nor service state is provided, default to firing
 		status = "firing"
 	}
 	fmt.Print("States are: ", *hostState, *serviceState, "\n")
